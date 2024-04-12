@@ -76,7 +76,13 @@ const addNewKeyword = (label, keyword) => {
 const reloadArticles = () => {
     document.querySelector('.articlesList').innerHTML = '';
     
-    const articlesToShow = data.articles;
+    // Filter the articles to show only those that contain at least one of the selected keywords
+    const articlesToShow = data.articles.filter(article => {
+        // For each article, check if at least one of the selected keywords is in the article's title
+        return currentKeywords.some(keyword => article.titre.includes(keyword));
+    });
+
+    // Display the filtered articles
     articlesToShow.forEach((article) => {
         document.querySelector('.articlesList').innerHTML += `
             <article>
