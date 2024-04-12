@@ -134,6 +134,48 @@ const showKeywordsList = (value) => {
         const keyWordUl = document.querySelector(".inputKeywordsHandle ul");
         resetKeywordsUl();
         
+        // Filter the keywords
+        const filteredKeywords = allKeywords.filter(keyword => {
+            const cleanedInput = cleanedKeyword(value);
+            const cleanedKeywordValue = cleanedKeyword(keyword);
+
+            // Check if the keyword starts with the input
+            return cleanedKeywordValue.includes(cleanedInput);
+        });
+
+        //Sort the keywords to show first the keyword containing a part of the word inserted
+        filteredKeywords.sort((a,b) => {
+            const cleanedInput = cleanedKeyword(value);
+            const cleanedA = cleanedKeyword(a);
+            const cleanedB = cleanedKeyword(b);
+
+            const aStartsWithInput = cleanedA.startsWith(cleanedInput);
+            const bStartsWithInput = cleanedB.startsWith(cleanedInput);
+
+            if (aStartsWithInput && !bStartsWithInput) {
+                return -1;
+            }
+            if (!aStartsWithInput && bStartsWithInput) {
+                return 1;
+            }
+            return 0;
+        });
+
+        // Add the filtered keywords to the list
+         filteredKeywords.forEach(keyword => {
+            // Check if the keyword is already in the list of presents hashtags
+            if (!currentKeywords.includes(keyword)) {
+                keyWordUl.innerHTML += `
+                    <li onclick="addNewKeyword('${keyword}', '${cleanedKeyword(keyword)}')">${keyword}</li>
+                `;
+            }
+        });
+    }
+};
+
+        
+
+            //
         // This will allow you to add a new element in the list under the text input
         // On click, we add the keyword, like so:
         // keyWordUl.innerHTML += `
